@@ -1,5 +1,5 @@
 {
-    "name": "gordon/laravel-portier",
+    "name": "gordon-fcl/laravel-portier",
     "description": "A flexible, granular RBAC package for Laravel",
     "type": "library",
     "license": "MIT",
