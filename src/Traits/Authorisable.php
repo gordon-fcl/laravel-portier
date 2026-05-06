@@ -4,7 +4,7 @@ namespace Portier\Traits;
 
 trait Authorisable
 {
-    use HasRoles, HasPermissions;
+    use HasPermissions, HasRoles;
 
     public function isSuperAdmin(): bool
     {

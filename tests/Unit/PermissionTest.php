@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Database\QueryException;
 use Portier\Models\Permission;
 use Portier\Models\Role;
 
@@ -27,7 +28,7 @@ it('enforces unique permission names', function () {
     Permission::create(['name' => 'posts.create']);
 
     Permission::create(['name' => 'posts.create']);
-})->throws(\Illuminate\Database\QueryException::class);
+})->throws(QueryException::class);
 
 it('belongs to many roles', function () {
     $permission = Permission::create(['name' => 'posts.create']);

@@ -2,9 +2,9 @@
 
 namespace Portier\Tests;
 
-use Portier\PortierServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
+use Portier\PortierServiceProvider;
 
 abstract class TestCase extends OrchestraTestCase
 {

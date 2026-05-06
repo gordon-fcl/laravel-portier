@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Database\QueryException;
 use Portier\Models\Permission;
 use Portier\Models\Role;
 
@@ -31,7 +32,7 @@ it('enforces unique role names', function () {
     Role::create(['name' => 'admin']);
 
     Role::create(['name' => 'admin']);
-})->throws(\Illuminate\Database\QueryException::class);
+})->throws(QueryException::class);
 
 it('belongs to many permissions with granted pivot', function () {
     $role = Role::create(['name' => 'editor']);

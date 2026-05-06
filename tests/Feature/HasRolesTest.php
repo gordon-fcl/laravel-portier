@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Portier\Models\Role;
 use Portier\Tests\Fixtures\User;
 
@@ -96,4 +97,4 @@ it('checks if user has any of given roles', function () {
 
 it('throws when assigning a non-existent role', function () {
     $this->user->assignRole('non-existent');
-})->throws(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
+})->throws(ModelNotFoundException::class);

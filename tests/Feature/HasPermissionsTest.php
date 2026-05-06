@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Portier\Models\Permission;
 use Portier\Models\Role;
 use Portier\Tests\Fixtures\User;
@@ -92,4 +93,4 @@ it('checks hasAllPermissions', function () {
 
 it('throws when granting a non-existent permission', function () {
     $this->user->grantPermission('non-existent');
-})->throws(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
+})->throws(ModelNotFoundException::class);

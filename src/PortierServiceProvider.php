@@ -54,7 +54,8 @@ class PortierServiceProvider extends ServiceProvider
 
     private function registerMiddleware(): void
     {
-        $router = $this->app['router'];
+        /** @var \Illuminate\Routing\Router $router */
+        $router = $this->app->make('router');
         $router->aliasMiddleware('role', RoleMiddleware::class);
         $router->aliasMiddleware('permission', PermissionMiddleware::class);
     }
@@ -62,11 +63,15 @@ class PortierServiceProvider extends ServiceProvider
     private function registerBladeDirectives(): void
     {
         Blade::if('role', function (string $role) {
-            return auth()->check() && auth()->user()->hasRole($role);
+            $user = auth()->user();
+
+            return $user !== null && method_exists($user, 'hasRole') && $user->hasRole($role);
         });
 
         Blade::if('permission', function (string $permission) {
-            return auth()->check() && auth()->user()->hasPermission($permission);
+            $user = auth()->user();
+
+            return $user !== null && method_exists($user, 'hasPermission') && $user->hasPermission($permission);
         });
     }
 }
