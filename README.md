@@ -4,9 +4,9 @@ A flexible, granular RBAC package for Laravel. Drop-in admin UI, Gate integratio
 
 ## Status
 
-**Phase 1 & 2 complete.** Next: Phase 3 (Gate integration, middleware, Blade directives).
+**Phases 1–3 complete.** Next: Phase 4 (Schema & sync), Phase 5 (Caching), Phase 6 (Events & CLI).
 
-- 49 tests passing (Pest)
+- 72 tests passing (Pest, 107 assertions)
 - Namespace: `Portier\`
 - Requires: PHP 8.2+, Laravel 11/12
 
@@ -16,6 +16,9 @@ A flexible, granular RBAC package for Laravel. Drop-in admin UI, Gate integratio
 - **Traits:** HasRoles, HasPermissions, Authorisable
 - **Resolution:** Role inheritance, wildcards (`posts.*`), explicit denials, `direct_overrides_role` config
 - **Super-admin:** Built-in via `isSuperAdmin()` — just assign the configured role
+- **Gate integration:** `Gate::before` hook — `$user->can()`, `@can`, `Gate::allows()` all work
+- **Middleware:** `role:admin`, `permission:posts.create` with `|` (any) and `&` (all) operators
+- **Blade directives:** `@role('admin')/@endrole`, `@permission('posts.create')/@endpermission`
 
 ## Running Tests
 
