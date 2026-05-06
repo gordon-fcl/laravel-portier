@@ -1,69 +1,42 @@
 # Project Instructions for AI Agents
 
-This file provides instructions and context for AI coding agents working on this project.
-
-<!-- BEGIN BEADS INTEGRATION v:1 profile:minimal hash:ca08a54f -->
 ## Beads Issue Tracker
 
-This project uses **bd (beads)** for issue tracking. Run `bd prime` to see full workflow context and commands.
+This project uses **bd (beads)** for issue tracking via MCP.
 
-### Quick Reference
-
-```bash
-bd ready              # Find available work
-bd show <id>          # View issue details
-bd update <id> --claim  # Claim work
-bd close <id>         # Complete work
-```
-
-### Rules
-
-- Use `bd` for ALL task tracking — do NOT use TodoWrite, TaskCreate, or markdown TODO lists
-- Run `bd prime` for detailed command reference and session close protocol
+- Use beads for ALL task tracking — do NOT use TodoWrite, TaskCreate, or markdown TODO lists
 - Use `bd remember` for persistent knowledge — do NOT use MEMORY.md files
 
-## Session Completion
+## Workflow Rules
 
-**When ending a work session**, you MUST complete ALL steps below. Work is NOT complete until `git push` succeeds.
-
-**MANDATORY WORKFLOW:**
-
-1. **File issues for remaining work** - Create issues for anything that needs follow-up
-2. **Run quality gates** (if code changed) - Tests, linters, builds
-3. **Update issue status** - Close finished work, update in-progress items
-4. **PUSH TO REMOTE** - This is MANDATORY:
-   ```bash
-   git pull --rebase
-   bd dolt push
-   git push
-   git status  # MUST show "up to date with origin"
-   ```
-5. **Clean up** - Clear stashes, prune remote branches
-6. **Verify** - All changes committed AND pushed
-7. **Hand off** - Provide context for next session
-
-**CRITICAL RULES:**
-- Work is NOT complete until `git push` succeeds
-- NEVER stop before pushing - that leaves work stranded locally
-- NEVER say "ready to push when you are" - YOU must push
-- If push fails, resolve and retry until it succeeds
-<!-- END BEADS INTEGRATION -->
-
+1. **Tests are mandatory.** Work is not finished until there are tests that cover the changes/new functionality, and those tests pass.
+2. **Update markdown docs before moving on.** README.md and ROADMAP.md must reflect the current state before starting the next task.
+3. **Do not push.** The developer will push when ready. Do not run `git push` unless explicitly asked.
+4. **Commit atomically.** Stage only relevant files, use brief commit messages.
+5. **File issues for remaining work.** Use beads to track anything that needs follow-up.
 
 ## Build & Test
 
-_Add your build and test commands here_
-
 ```bash
-# Example:
-# npm install
-# npm test
+composer install
+./vendor/bin/pest
 ```
 
 ## Architecture Overview
 
-_Add a brief overview of your project architecture_
+Laravel RBAC package. Namespace: `Portier\`.
 
-## Conventions & Patterns
+- `src/Models/` — Permission, Role, RolePermission
+- `src/Traits/` — HasRoles, HasPermissions, Authorisable
+- `src/Middleware/` — RoleMiddleware, PermissionMiddleware
+- `src/PortierServiceProvider.php` — Gate::before, middleware aliases, Blade directives
+- `config/portier.php` — Package configuration
+- `database/migrations/` — 5 tables
+- `tests/` — Pest tests (Feature + Unit)
 
-_Add your project-specific conventions here_
+## Conventions
+
+- PHP 8.2+, Laravel 11/12
+- Pest for testing, SQLite in-memory
+- Orchestra Testbench for package testing
+- No build tools — Blade views use Tailwind CDN when needed
