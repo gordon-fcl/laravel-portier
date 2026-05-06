@@ -12,7 +12,7 @@ This project uses **bd (beads)** for issue tracking via MCP.
 1. **Tests are mandatory.** Work is not finished until there are tests that cover the changes/new functionality, and those tests pass.
 2. **Update markdown docs before moving on.** README.md and ROADMAP.md must reflect the current state before starting the next task.
 3. **Do not push.** The developer will push when ready. Do not run `git push` unless explicitly asked.
-4. **Commit atomically.** Stage only relevant files, use brief commit messages.
+4. **Commit atomically.** Stage only relevant files, use brief commit messages. Always include `composer.lock` when dependencies are added or removed.
 5. **File issues for remaining work.** Use beads to track anything that needs follow-up.
 6. **No links to files outside the repository.** Documentation must be self-contained. Never reference local filesystem paths or documents that don't exist within the repo.
 
