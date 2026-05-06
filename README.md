@@ -29,5 +29,4 @@ composer install
 
 ## Docs
 
-- [SPECIFICATION.md](../../../farington_consultancy/clients/managing_work/2025/Clients/10_Clients/Farington%20Consultancy/Projects/Laravel%20Portier/SPECIFICATION.md) — Full technical spec
-- [ROADMAP.md](../../../farington_consultancy/clients/managing_work/2025/Clients/10_Clients/Farington%20Consultancy/Projects/Laravel%20Portier/ROADMAP.md) — Development phases
+See the project's issue tracker (`bd ready`) for current work and roadmap.

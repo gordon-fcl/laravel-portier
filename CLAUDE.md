@@ -14,6 +14,7 @@ This project uses **bd (beads)** for issue tracking via MCP.
 3. **Do not push.** The developer will push when ready. Do not run `git push` unless explicitly asked.
 4. **Commit atomically.** Stage only relevant files, use brief commit messages.
 5. **File issues for remaining work.** Use beads to track anything that needs follow-up.
+6. **No links to files outside the repository.** Documentation must be self-contained. Never reference local filesystem paths or documents that don't exist within the repo.
 
 ## Build & Test
 
