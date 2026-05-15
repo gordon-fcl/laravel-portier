@@ -33,5 +33,18 @@ return [
         'prefix' => 'api/portier',
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Permission Schema
+    |--------------------------------------------------------------------------
+    |
+    | Define your permissions here and run `php artisan portier:sync` to keep
+    | the database in sync. Supports grouped and flat formats:
+    |
+    | 'posts' => ['create', 'read', 'update', 'delete'],
+    | 'users' => ['create', 'read', 'update', 'delete'],
+    | 'reports.export',  // flat string
+    |
+    */
     'schema' => [],
 ];

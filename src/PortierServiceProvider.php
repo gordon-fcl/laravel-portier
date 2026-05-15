@@ -24,6 +24,7 @@ class PortierServiceProvider extends ServiceProvider
         $this->registerGateHook();
         $this->registerMiddleware();
         $this->registerBladeDirectives();
+        $this->registerCommands();
     }
 
     private function publishConfig(): void
@@ -74,5 +75,14 @@ class PortierServiceProvider extends ServiceProvider
 
             return $user !== null && method_exists($user, 'hasPermission') && $user->hasPermission($permission);
         });
+    }
+
+    private function registerCommands(): void
+    {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                Console\SyncPermissionsCommand::class,
+            ]);
+        }
     }
 }
