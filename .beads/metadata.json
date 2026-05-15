@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "embedded",
+  "dolt_database": "laravel_portier",
+  "project_id": "95867fea-7d3d-445d-9c53-b3e08c9b65cb"
+}

@@ -1,0 +1,56 @@
+{
+    "name": "gordon-fcl/laravel-portier",
+    "description": "A flexible, granular RBAC package for Laravel",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Gordon Thomson",
+            "email": "gordon@farington-consultancy.co.uk"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^11.0|^12.0",
+        "illuminate/database": "^11.0|^12.0",
+        "illuminate/auth": "^11.0|^12.0"
+    },
+    "require-dev": {
+        "larastan/larastan": "^3.9",
+        "laravel/pint": "^1.29",
+        "orchestra/testbench": "^9.0|^10.0",
+        "pestphp/pest": "^3.0",
+        "pestphp/pest-plugin-laravel": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Portier\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Portier\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Portier\\PortierServiceProvider"
+            ],
+            "aliases": {
+                "Portier": "Portier\\Facades\\Portier"
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        },
+        "platform": {
+            "php": "8.2.0"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
