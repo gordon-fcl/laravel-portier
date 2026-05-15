@@ -3,6 +3,7 @@
 namespace Portier;
 
 use Illuminate\Contracts\Auth\Access\Authorizable;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -54,7 +55,7 @@ class PortierServiceProvider extends ServiceProvider
 
     private function registerMiddleware(): void
     {
-        /** @var \Illuminate\Routing\Router $router */
+        /** @var Router $router */
         $router = $this->app->make('router');
         $router->aliasMiddleware('role', RoleMiddleware::class);
         $router->aliasMiddleware('permission', PermissionMiddleware::class);
