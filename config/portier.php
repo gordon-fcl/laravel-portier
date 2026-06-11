@@ -42,9 +42,30 @@ return [
     | the database in sync. Supports grouped and flat formats:
     |
     | 'posts' => ['create', 'read', 'update', 'delete'],
-    | 'users' => ['create', 'read', 'update', 'delete'],
-    | 'reports.export',  // flat string
     |
     */
-    'schema' => [],
+    'schema' => [
+        'users' => ['create', 'read', 'update', 'delete'],
+        'roles' => ['create', 'read', 'update', 'delete', 'assign'],
+        'permissions' => ['read', 'assign'],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default Roles
+    |--------------------------------------------------------------------------
+    |
+    | Suggested roles to create with `portier:sync`. These are not enforced
+    | — just a starting point. Adjust to suit your application.
+    |
+    */
+    'roles' => [
+        'super-admin' => ['*'],
+        'admin' => [
+            'users.*', 'roles.read', 'roles.assign', 'permissions.read', 'permissions.assign',
+        ],
+        'readonly' => [
+            'users.read', 'roles.read', 'permissions.read',
+        ],
+    ],
 ];

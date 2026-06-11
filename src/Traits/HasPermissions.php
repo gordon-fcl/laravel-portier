@@ -5,6 +5,7 @@ namespace Portier\Traits;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Portier\Models\Permission;
 use Portier\Models\Role;
+use Portier\Services\PermissionRegistrar;
 
 trait HasPermissions
 {
@@ -19,12 +20,14 @@ trait HasPermissions
     public function grantPermission(string|Permission ...$permissions): void
     {
         $this->syncPermissionRecords($permissions, true);
+        $this->invalidatePermissionCache();
     }
 
     public function revokePermission(string|Permission ...$permissions): void
     {
         $ids = collect($permissions)->map(fn ($p) => $this->resolvePermissionId($p))->all();
         $this->permissions()->detach($ids);
+        $this->invalidatePermissionCache();
     }
 
     public function syncPermissions(array $permissions): void
@@ -34,6 +37,7 @@ trait HasPermissions
         ])->all();
 
         $this->permissions()->sync($sync);
+        $this->invalidatePermissionCache();
     }
 
     public function hasPermission(string $permission): bool
@@ -175,6 +179,23 @@ trait HasPermissions
             return $permission->id;
         }
 
+        $registrar = app(PermissionRegistrar::class);
+
+        if ($registrar->isEnabled()) {
+            $cached = $registrar->getPermissions()->firstWhere('name', $permission);
+            if ($cached) {
+                return $cached->id;
+            }
+        }
+
         return Permission::where('name', $permission)->firstOrFail()->id;
+    }
+
+    private function invalidatePermissionCache(): void
+    {
+        $this->unsetRelation('permissions');
+
+        $registrar = app(PermissionRegistrar::class);
+        $registrar->forgetUserCache($this->getKey(), $this->getMorphClass());
     }
 }

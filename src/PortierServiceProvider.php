@@ -9,12 +9,15 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Portier\Middleware\PermissionMiddleware;
 use Portier\Middleware\RoleMiddleware;
+use Portier\Services\PermissionRegistrar;
 
 class PortierServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/portier.php', 'portier');
+
+        $this->app->singleton(PermissionRegistrar::class);
     }
 
     public function boot(): void
@@ -82,6 +85,8 @@ class PortierServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 Console\SyncPermissionsCommand::class,
+                Console\CacheCommand::class,
+                Console\ClearCacheCommand::class,
             ]);
         }
     }
