@@ -4,6 +4,7 @@ namespace Portier\Traits;
 
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Portier\Models\Role;
+use Portier\Services\PermissionRegistrar;
 
 trait HasRoles
 {
@@ -18,18 +19,21 @@ trait HasRoles
     {
         $ids = collect($roles)->map(fn ($role) => $this->resolveRoleId($role))->all();
         $this->roles()->syncWithoutDetaching($ids);
+        $this->invalidateRoleCache();
     }
 
     public function removeRole(string|Role ...$roles): void
     {
         $ids = collect($roles)->map(fn ($role) => $this->resolveRoleId($role))->all();
         $this->roles()->detach($ids);
+        $this->invalidateRoleCache();
     }
 
     public function syncRoles(array $roles): void
     {
         $ids = collect($roles)->map(fn ($role) => $this->resolveRoleId($role))->all();
         $this->roles()->sync($ids);
+        $this->invalidateRoleCache();
     }
 
     public function hasRole(string|Role $role): bool
@@ -57,5 +61,13 @@ trait HasRoles
         }
 
         return Role::where('name', $role)->firstOrFail()->id;
+    }
+
+    private function invalidateRoleCache(): void
+    {
+        $this->unsetRelation('roles');
+
+        $registrar = app(PermissionRegistrar::class);
+        $registrar->forgetUserCache($this->getKey(), $this->getMorphClass());
     }
 }
