@@ -19,7 +19,10 @@ class AssignRoleCommand extends Command
         $modelClass = $this->option('model')
             ?: config('portier.user_models.default', 'App\\Models\\User');
 
-        $user = $modelClass::find($this->argument('user'));
+        /** @var string $userId */
+        $userId = $this->argument('user');
+
+        $user = $modelClass::find($userId);
 
         if (! $user) {
             $this->error('User not found.');
@@ -27,6 +30,7 @@ class AssignRoleCommand extends Command
             return self::FAILURE;
         }
 
+        /** @var string $roleName */
         $roleName = $this->argument('role');
 
         if (! Role::where('name', $roleName)->exists()) {

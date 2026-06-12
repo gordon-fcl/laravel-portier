@@ -17,6 +17,7 @@ class CreateRoleCommand extends Command
 
     public function handle(): int
     {
+        /** @var string $name */
         $name = $this->argument('name');
 
         if (Role::where('name', $name)->exists()) {
