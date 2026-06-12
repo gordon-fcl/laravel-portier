@@ -4,9 +4,9 @@ A flexible, granular RBAC package for Laravel. Drop-in admin UI, Gate integratio
 
 ## Status
 
-**Phases 1–4 complete.** Next: Phase 5 (Caching), Phase 6 (Events & CLI).
+**Phases 1–6 complete.** Next: Phase 7 (API Authorisation & Endpoints).
 
-- 87 tests passing (Pest)
+- 116 tests passing (Pest)
 - Namespace: `Portier\`
 - Requires: PHP 8.2+, Laravel 11/12
 
@@ -20,6 +20,9 @@ A flexible, granular RBAC package for Laravel. Drop-in admin UI, Gate integratio
 - **Middleware:** `role:admin`, `permission:posts.create` with `|` (any) and `&` (all) operators
 - **Blade directives:** `@role('admin')/@endrole`, `@permission('posts.create')/@endpermission`
 - **Schema & sync:** Define permissions in config, run `php artisan portier:sync` to keep DB in sync
+- **Caching:** PermissionRegistrar caches permissions/roles, auto-invalidates on write, configurable store/TTL
+- **Events:** RoleAssigned, RoleRemoved, PermissionGranted, PermissionRevoked, RoleCreated, RoleDeleted, PermissionsSynced
+- **CLI:** `portier:sync`, `portier:cache`, `portier:clear-cache`, `portier:create-role`, `portier:assign`
 
 ## Running Tests
 
