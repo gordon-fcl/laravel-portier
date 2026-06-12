@@ -87,6 +87,8 @@ class PortierServiceProvider extends ServiceProvider
                 Console\SyncPermissionsCommand::class,
                 Console\CacheCommand::class,
                 Console\ClearCacheCommand::class,
+                Console\CreateRoleCommand::class,
+                Console\AssignRoleCommand::class,
             ]);
         }
     }

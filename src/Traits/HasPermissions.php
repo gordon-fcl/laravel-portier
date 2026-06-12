@@ -3,6 +3,8 @@
 namespace Portier\Traits;
 
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Portier\Events\PermissionGranted;
+use Portier\Events\PermissionRevoked;
 use Portier\Models\Permission;
 use Portier\Models\Role;
 use Portier\Services\PermissionRegistrar;
@@ -19,15 +21,21 @@ trait HasPermissions
 
     public function grantPermission(string|Permission ...$permissions): void
     {
-        $this->syncPermissionRecords($permissions, true);
+        $resolved = collect($permissions)->map(fn ($p) => $this->resolvePermission($p));
+        $sync = $resolved->mapWithKeys(fn (Permission $p) => [$p->id => ['granted' => true]])->all();
+        $this->permissions()->syncWithoutDetaching($sync);
         $this->invalidatePermissionCache();
+
+        $resolved->each(fn (Permission $p) => PermissionGranted::dispatch($this, $p));
     }
 
     public function revokePermission(string|Permission ...$permissions): void
     {
-        $ids = collect($permissions)->map(fn ($p) => $this->resolvePermissionId($p))->all();
-        $this->permissions()->detach($ids);
+        $resolved = collect($permissions)->map(fn ($p) => $this->resolvePermission($p));
+        $this->permissions()->detach($resolved->pluck('id')->all());
         $this->invalidatePermissionCache();
+
+        $resolved->each(fn (Permission $p) => PermissionRevoked::dispatch($this, $p));
     }
 
     public function syncPermissions(array $permissions): void
@@ -164,19 +172,15 @@ trait HasPermissions
         return str_starts_with($permission, $prefix.'.');
     }
 
-    private function syncPermissionRecords(array $permissions, bool $granted): void
-    {
-        $sync = collect($permissions)->mapWithKeys(fn ($p) => [
-            $this->resolvePermissionId($p) => ['granted' => $granted],
-        ])->all();
-
-        $this->permissions()->syncWithoutDetaching($sync);
-    }
-
     private function resolvePermissionId(string|Permission $permission): int
     {
+        return $this->resolvePermission($permission)->id;
+    }
+
+    private function resolvePermission(string|Permission $permission): Permission
+    {
         if ($permission instanceof Permission) {
-            return $permission->id;
+            return $permission;
         }
 
         $registrar = app(PermissionRegistrar::class);
@@ -184,11 +188,11 @@ trait HasPermissions
         if ($registrar->isEnabled()) {
             $cached = $registrar->getPermissions()->firstWhere('name', $permission);
             if ($cached) {
-                return $cached->id;
+                return $cached;
             }
         }
 
-        return Permission::where('name', $permission)->firstOrFail()->id;
+        return Permission::where('name', $permission)->firstOrFail();
     }
 
     private function invalidatePermissionCache(): void

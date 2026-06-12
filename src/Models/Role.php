@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Portier\Events\RoleCreated;
+use Portier\Events\RoleDeleted;
 
 class Role extends Model
 {
@@ -13,6 +15,11 @@ class Role extends Model
 
     protected $casts = [
         'is_system' => 'boolean',
+    ];
+
+    protected $dispatchesEvents = [
+        'created' => RoleCreated::class,
+        'deleted' => RoleDeleted::class,
     ];
 
     public function getTable(): string
