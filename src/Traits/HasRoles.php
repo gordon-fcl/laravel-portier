@@ -3,6 +3,8 @@
 namespace Portier\Traits;
 
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Portier\Events\RoleAssigned;
+use Portier\Events\RoleRemoved;
 use Portier\Models\Role;
 use Portier\Services\PermissionRegistrar;
 
@@ -17,16 +19,20 @@ trait HasRoles
 
     public function assignRole(string|Role ...$roles): void
     {
-        $ids = collect($roles)->map(fn ($role) => $this->resolveRoleId($role))->all();
-        $this->roles()->syncWithoutDetaching($ids);
+        $resolved = collect($roles)->map(fn ($role) => $this->resolveRole($role));
+        $this->roles()->syncWithoutDetaching($resolved->pluck('id')->all());
         $this->invalidateRoleCache();
+
+        $resolved->each(fn (Role $role) => RoleAssigned::dispatch($this, $role));
     }
 
     public function removeRole(string|Role ...$roles): void
     {
-        $ids = collect($roles)->map(fn ($role) => $this->resolveRoleId($role))->all();
-        $this->roles()->detach($ids);
+        $resolved = collect($roles)->map(fn ($role) => $this->resolveRole($role));
+        $this->roles()->detach($resolved->pluck('id')->all());
         $this->invalidateRoleCache();
+
+        $resolved->each(fn (Role $role) => RoleRemoved::dispatch($this, $role));
     }
 
     public function syncRoles(array $roles): void
@@ -54,13 +60,18 @@ trait HasRoles
         return false;
     }
 
-    private function resolveRoleId(string|Role $role): int
+    private function resolveRole(string|Role $role): Role
     {
         if ($role instanceof Role) {
-            return $role->id;
+            return $role;
         }
 
-        return Role::where('name', $role)->firstOrFail()->id;
+        return Role::where('name', $role)->firstOrFail();
+    }
+
+    private function resolveRoleId(string|Role $role): int
+    {
+        return $this->resolveRole($role)->id;
     }
 
     private function invalidateRoleCache(): void
