@@ -12,6 +12,16 @@ bd close <id>         # Complete work
 bd dolt push          # Push beads data to remote
 ```
 
+## Branching Rules
+
+**ALWAYS create a new branch from `main`** when starting new functionality or fixing a bug. Never commit unrelated work onto an existing feature branch.
+
+```bash
+git checkout main
+git pull
+git checkout -b feat/phase-X-description   # or fix/description
+```
+
 ## Non-Interactive Shell Commands
 
 **ALWAYS use non-interactive flags** with file operations to avoid hanging on confirmation prompts.
