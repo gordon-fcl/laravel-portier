@@ -6,7 +6,7 @@ A flexible, granular RBAC package for Laravel. Drop-in admin UI, Gate integratio
 
 **Phases 1–6 complete.** Next: Phase 7 (API Authorisation & Endpoints).
 
-- 116 tests passing (Pest)
+- 117 tests passing (Pest)
 - Namespace: `Portier\`
 - Requires: PHP 8.2+, Laravel 11/12
 
